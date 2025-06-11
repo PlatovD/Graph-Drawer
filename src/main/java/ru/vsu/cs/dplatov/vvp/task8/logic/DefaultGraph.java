@@ -68,7 +68,7 @@ public class DefaultGraph<T, N extends Number> implements WGraph<T, N> {
             addEdge(v1, v2, weight);
         } else {
             chainedLists.get(v1).add(new DefaultEdge(v1, v2, weight));
-            chainedLists.get(v1).add(new DefaultEdge(v2, v1, weight));
+            chainedLists.get(v2).add(new DefaultEdge(v2, v1, weight));
             edgesCnt++;
         }
     }
@@ -91,6 +91,11 @@ public class DefaultGraph<T, N extends Number> implements WGraph<T, N> {
             return;
         }
         chainedLists.put(value, new ArrayList<>());
+    }
+
+    @Override
+    public void clear() {
+        chainedLists.clear();
     }
 
     @Override
@@ -157,5 +162,9 @@ public class DefaultGraph<T, N extends Number> implements WGraph<T, N> {
             return new ArrayList<>();
         }
         return () -> chainedLists.get(v).iterator();
+    }
+
+    public Iterable<T> allNodes() {
+        return chainedLists.keySet();
     }
 }

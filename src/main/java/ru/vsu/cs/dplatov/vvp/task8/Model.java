@@ -1,4 +1,4 @@
-package ru.vsu.cs.dplatov.vvp.task8.graphic;
+package ru.vsu.cs.dplatov.vvp.task8;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
@@ -6,13 +6,16 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicEdge;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.logic.DefaultGraph;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphicStorage {
+public class Model {
     private Node activeObject;
-    private static GraphicStorage instance;
+    private static Model instance;
     private List<GraphicNode> nodes = new ArrayList<>();
     private List<GraphicEdge> edges = new ArrayList<>();
 
@@ -20,9 +23,9 @@ public class GraphicStorage {
         return activeObject;
     }
 
-    public static GraphicStorage getInstance() {
+    public static Model getInstance() {
         if (instance == null) {
-            instance = new GraphicStorage();
+            instance = new Model();
         }
         return instance;
     }
@@ -64,6 +67,8 @@ public class GraphicStorage {
         if (first == null || second == null) return null;
         GraphicEdge edge = new GraphicEdge(first, second);
         edges.add(edge);
+        first.addConnectedEdges(edge);
+        second.addConnectedEdges(edge);
         edge.setStartX(first.getCenterX());
         edge.setStartY(first.getCenterY());
         edge.setEndX(second.getCenterX());
@@ -82,7 +87,7 @@ public class GraphicStorage {
         return edges;
     }
 
-    private GraphicStorage() {
+    private Model() {
     }
 
     public void setActiveObject(Node activeObject) {
@@ -124,6 +129,7 @@ public class GraphicStorage {
         Point2D mouseInParent = node.localToParent(event.getX(), event.getY());
         node.setLayoutX(mouseInParent.getX() - node.getClickX());
         node.setLayoutY(mouseInParent.getY() - node.getClickY());
+        node.updateEdgesPositions();
     }
 
     private void dragStopHandler(MouseEvent event) {
@@ -140,5 +146,15 @@ public class GraphicStorage {
     public void deleteNode(GraphicNode node) {
         nodes.remove(node);
         activeObject = null;
+    }
+
+    public void parseToBack(DefaultGraph<String, Integer> graphToFill) {
+        graphToFill.clear();
+        for (GraphicNode node : nodes) {
+            graphToFill.addNode(node.getText());
+        }
+        for (GraphicEdge edge : edges) {
+            graphToFill.addEdge(edge.getFrom().getText(), edge.getTo().getText(), edge.getWeight());
+        }
     }
 }

@@ -1,14 +1,16 @@
 package ru.vsu.cs.dplatov.vvp.task8.graphic;
 
-import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GraphicNode extends HBox {
     private final TextField textField = new TextField("Node");
+    private final List<GraphicEdge> connectedEdges = new ArrayList<>();
 
     private double clickX = -1;
     private double clickY = -1;
@@ -28,9 +30,24 @@ public class GraphicNode extends HBox {
         setStyle("-fx-background-color: #f8f8f8; " +
                 "-fx-border-color: black; " +
                 "-fx-border-width: 1;");
-        setPrefSize(80, 80);
+        setPrefSize(70, 70);
         setAlignment(Pos.CENTER);
         toFront();
+    }
+
+    public void updateEdgesPositions() {
+        for (GraphicEdge edge : connectedEdges) {
+            switch (edge.getPointPosition(this)) {
+                case START -> {
+                    edge.setStartX(getCenterX());
+                    edge.setStartY(getCenterY());
+                }
+                case END -> {
+                    edge.setEndX(getCenterX());
+                    edge.setEndY(getCenterY());
+                }
+            }
+        }
     }
 
     public double getCenterX() {
@@ -67,5 +84,9 @@ public class GraphicNode extends HBox {
 
     public void setWasDragged(boolean wasDragged) {
         this.wasDragged = wasDragged;
+    }
+
+    public void addConnectedEdges(GraphicEdge edge) {
+        connectedEdges.add(edge);
     }
 }

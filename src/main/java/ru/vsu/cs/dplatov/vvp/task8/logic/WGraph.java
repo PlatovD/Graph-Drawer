@@ -35,6 +35,11 @@ public interface WGraph<T, N extends Number> {
 
     boolean containsNode(T value);
 
+    /**
+     * Очистить граф
+     */
+    void clear();
+
     boolean containsEdge(T from, T to);
 
     /**

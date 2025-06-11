@@ -1,31 +1,41 @@
 package ru.vsu.cs.dplatov.vvp.task8;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicEdge;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicNode;
-import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicStorage;
+import ru.vsu.cs.dplatov.vvp.task8.logic.DefaultGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller {
+public class Controller implements Initializable {
     @FXML
     private Pane drawingPane;
 
-    private final GraphicStorage storage = GraphicStorage.getInstance();
+    @FXML
+    private TabPane leftMenuPane;
 
+    private final Model storage = Model.getInstance();
+
+    //List
+    @FXML
+    private TextArea stringNotationArea;
+
+    @FXML
+    private Button drawFromListNotationButton;
+
+    //Graphic
     @FXML
     private Rectangle exampleNode;
 
@@ -82,8 +92,31 @@ public class Controller {
 
         GraphicEdge edge = storage.createEdge(firstNode, secondNode);
         if (edge != null) {
-            drawingPane.getChildren().add(edge);
+            drawingPane.getChildren().addAll(edge, edge.getWeightField());
             edge.toBack();
         }
+    }
+
+    private void onChangeTab(ObservableValue<? extends Tab> obs, Tab lastTab, Tab newTab) {
+        DefaultGraph<String, Integer> graph = new DefaultGraph<>();
+        storage.parseToBack(graph);
+
+        // обновление list нотации
+        StringBuilder sb = new StringBuilder();
+        for (String s : graph.allNodes()) {
+            for (WGraph.Edge<String, Integer> edge : graph.adjacentEdges(s)) {
+                sb.append(s).append(" ->[").append(edge.weight()).append("] ").append(edge.to()).append(";\n");
+            }
+        }
+        if (sb.isEmpty()) return;
+        stringNotationArea.setText(sb.toString());
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        leftMenuPane.getSelectionModel().selectedItemProperty().addListener((obs, last, current) -> {
+            if (!last.equals(current)) storage.deactivateObj();
+            onChangeTab(obs, last, current);
+        });
     }
 }
