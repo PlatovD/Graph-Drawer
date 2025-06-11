@@ -67,6 +67,8 @@ public interface WGraph<T, N extends Number> {
      */
     Iterable<Edge<T, N>> adjacentEdges(T v);
 
+    Iterable<T> allNodes();
+
     /**
      * @param <T> Тип значений узлов, которые связывает ребро
      * @param <N> Тип значения веса ребра

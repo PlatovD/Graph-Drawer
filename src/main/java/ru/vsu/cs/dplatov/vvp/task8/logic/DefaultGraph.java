@@ -42,6 +42,11 @@ public class DefaultGraph<T, N extends Number> implements WGraph<T, N> {
         public int hashCode() {
             return to.hashCode() + from.hashCode();
         }
+
+        @Override
+        public String toString() {
+            return from + " ->[" + weight + "] " + to;
+        }
     }
 
     private int edgesCnt = 0;
@@ -164,6 +169,7 @@ public class DefaultGraph<T, N extends Number> implements WGraph<T, N> {
         return () -> chainedLists.get(v).iterator();
     }
 
+    @Override
     public Iterable<T> allNodes() {
         return chainedLists.keySet();
     }

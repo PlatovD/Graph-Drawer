@@ -11,8 +11,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicEdge;
-import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicEdge;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.utils.DataGetter;
 import ru.vsu.cs.dplatov.vvp.task8.logic.DefaultGraph;
 import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
 
@@ -33,7 +34,7 @@ public class Controller implements Initializable {
     private TextArea stringNotationArea;
 
     @FXML
-    private Button drawFromListNotationButton;
+    private Button drawFromNotationButton;
 
     //Graphic
     @FXML
@@ -98,7 +99,7 @@ public class Controller implements Initializable {
     }
 
     private void onChangeTab(ObservableValue<? extends Tab> obs, Tab lastTab, Tab newTab) {
-        DefaultGraph<String, Integer> graph = new DefaultGraph<>();
+        WGraph<String, Integer> graph = new DefaultGraph<>();
         storage.parseToBack(graph);
 
         // обновление list нотации
@@ -118,5 +119,11 @@ public class Controller implements Initializable {
             if (!last.equals(current)) storage.deactivateObj();
             onChangeTab(obs, last, current);
         });
+    }
+
+    @FXML
+    private void drawFromNotationHandler() {
+        onChangeTab(null, null, null);
+        WGraph<String, Integer> graph = DataGetter.getDataFromStringNotationArea(stringNotationArea);
     }
 }

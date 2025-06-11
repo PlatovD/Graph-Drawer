@@ -1,4 +1,4 @@
-package ru.vsu.cs.dplatov.vvp.task8.graphic;
+package ru.vsu.cs.dplatov.vvp.task8.graphic.elements;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;

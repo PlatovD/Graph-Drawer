@@ -6,9 +6,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicEdge;
-import ru.vsu.cs.dplatov.vvp.task8.graphic.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicEdge;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
 import ru.vsu.cs.dplatov.vvp.task8.logic.DefaultGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,7 +149,7 @@ public class Model {
         activeObject = null;
     }
 
-    public void parseToBack(DefaultGraph<String, Integer> graphToFill) {
+    public void parseToBack(WGraph<String, Integer> graphToFill) {
         graphToFill.clear();
         for (GraphicNode node : nodes) {
             graphToFill.addNode(node.getText());
