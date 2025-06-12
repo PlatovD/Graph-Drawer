@@ -126,15 +126,19 @@ public class Controller implements Initializable {
     }
 
     private void onChangeTab(ObservableValue<? extends Tab> obs, Tab lastTab, Tab newTab) {
+        if (leftMenuPane.getSelectionModel().isSelected(1)) return;
         WGraph<String, Integer> graph = new DefaultGraph<>();
         storage.parseToBack(graph);
 
         // обновление list нотации
         StringBuilder sb = new StringBuilder();
         for (String s : graph.allNodes()) {
+            int cnt = 0;
             for (WGraph.Edge<String, Integer> edge : graph.adjacentEdges(s)) {
                 sb.append(s).append(" ->[").append(edge.weight()).append("] ").append(edge.to()).append(";\n");
+                cnt++;
             }
+            if (cnt == 0) sb.append(s).append(";\n");
         }
         if (sb.isEmpty()) return;
         stringNotationArea.setText(sb.toString());

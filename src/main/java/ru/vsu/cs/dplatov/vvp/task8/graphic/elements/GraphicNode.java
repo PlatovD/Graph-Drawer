@@ -1,5 +1,6 @@
 package ru.vsu.cs.dplatov.vvp.task8.graphic.elements;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -11,6 +12,7 @@ import java.util.List;
 public class GraphicNode extends HBox {
     private final TextField textField = new TextField("Node");
     private final List<GraphicEdge> connectedEdges = new ArrayList<>();
+    private Point2D point2D;
 
     private double clickX = -1;
     private double clickY = -1;
@@ -20,6 +22,10 @@ public class GraphicNode extends HBox {
         reset();
         getChildren().add(textField);
         textField.setText(value);
+    }
+
+    public void calcPoint2D() {
+        point2D = new Point2D(getCenterX(), getCenterY());
     }
 
     public GraphicNode() {
@@ -98,6 +104,28 @@ public class GraphicNode extends HBox {
 
     public List<GraphicEdge> getConnectedEdges() {
         return connectedEdges;
+    }
+
+    public List<GraphicNode> getConnectedNodes() {
+        List<GraphicNode> connected = new ArrayList<>();
+        for (GraphicEdge edge : connectedEdges) {
+            if (!edge.getFrom().equals(this)) {
+                connected.add(edge.getFrom());
+            } else {
+                connected.add(edge.getTo());
+            }
+        }
+        return connected;
+    }
+
+    public Point2D getPosition() {
+        return point2D;
+    }
+
+    public void setPosition(Point2D point2D) {
+        setLayoutX(point2D.getX() - getWidth() / 2);
+        setLayoutY(point2D.getY() - getHeight() / 2);
+        this.point2D = point2D;
     }
 }
 

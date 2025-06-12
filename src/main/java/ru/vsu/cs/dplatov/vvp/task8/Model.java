@@ -46,6 +46,7 @@ public class Model {
         GraphicNode node = new GraphicNode(value);
         node.setLayoutX(x - node.getWidth() / 2);
         node.setLayoutY(y - node.getWidth() / 2);
+        node.calcPoint2D();
         nodes.add(node);
         setNodeHandlers(node);
         return node;
