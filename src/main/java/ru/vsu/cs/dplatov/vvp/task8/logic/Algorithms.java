@@ -50,19 +50,19 @@ public class Algorithms {
         return path;
     }
 
-    public static void main(String[] args) {
-        WGraph<String, Integer> graph = new DefaultGraph<>();
-        graph.addNode("Dima");
-        graph.addNode("Vika");
-        graph.addNode("Alina");
-        graph.addNode("Matvey");
-
-        graph.addEdge("Dima", "Vika", 5);
-        graph.addEdge("Dima", "Matvey", 1);
-        graph.addEdge("Vika", "Matvey", 2);
-        graph.addEdge("Matvey", "Alina", 1);
-        graph.addEdge("Vika", "Alina", 10);
-
-        System.out.println(findTheShortestPath(graph, "Dima", "Alina"));
-    }
+//    public static void main(String[] args) {
+//        WGraph<String, Integer> graph = new DefaultGraph<>();
+//        graph.addNode("Dima");
+//        graph.addNode("Vika");
+//        graph.addNode("Alina");
+//        graph.addNode("Matvey");
+//
+//        graph.addEdge("Dima", "Vika", 5);
+//        graph.addEdge("Dima", "Matvey", 1);
+//        graph.addEdge("Vika", "Matvey", 2);
+//        graph.addEdge("Matvey", "Alina", 1);
+//        graph.addEdge("Vika", "Alina", 10);
+//
+//        System.out.println(findTheShortestPath(graph, "Dima", "Alina"));
+//    }
 }

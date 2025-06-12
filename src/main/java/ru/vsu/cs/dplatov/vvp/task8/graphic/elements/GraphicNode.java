@@ -16,9 +16,14 @@ public class GraphicNode extends HBox {
     private double clickY = -1;
     private boolean wasDragged = false;
 
-    public GraphicNode() {
+    public GraphicNode(String value) {
         reset();
         getChildren().add(textField);
+        textField.setText(value);
+    }
+
+    public GraphicNode() {
+        new GraphicNode("Node");
     }
 
     public void reset() {
@@ -37,6 +42,7 @@ public class GraphicNode extends HBox {
 
     public void updateEdgesPositions() {
         for (GraphicEdge edge : connectedEdges) {
+            edge.toBack();
             switch (edge.getPointPosition(this)) {
                 case START -> {
                     edge.setStartX(getCenterX());
@@ -51,11 +57,11 @@ public class GraphicNode extends HBox {
     }
 
     public double getCenterX() {
-        return getLayoutX() + getWidth() / 2;
+        return getLayoutX() + getPrefWidth() / 2;
     }
 
     public double getCenterY() {
-        return getLayoutY() + getHeight() / 2;
+        return getLayoutY() + getPrefHeight() / 2;
     }
 
     public String getText() {
@@ -89,4 +95,9 @@ public class GraphicNode extends HBox {
     public void addConnectedEdges(GraphicEdge edge) {
         connectedEdges.add(edge);
     }
+
+    public List<GraphicEdge> getConnectedEdges() {
+        return connectedEdges;
+    }
 }
+

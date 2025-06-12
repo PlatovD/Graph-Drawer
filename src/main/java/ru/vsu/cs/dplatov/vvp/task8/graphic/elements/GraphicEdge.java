@@ -15,8 +15,19 @@ public class GraphicEdge extends Line {
         this.to = to;
         setFill(Color.GRAY);
         createCustomizedWeightField();
-        weightField.layoutXProperty().bind(startXProperty().add(endXProperty()).divide(2).subtract(weightField.getWidth() / 2));
-        weightField.layoutYProperty().bind(startYProperty().add(endYProperty()).divide(2).subtract(weightField.getHeight() / 2));
+        weightField.layoutXProperty().bind(
+                startXProperty()
+                        .add(endXProperty())
+                        .divide(2)
+                        .subtract(weightField.widthProperty().divide(2))
+        );
+
+        weightField.layoutYProperty().bind(
+                startYProperty()
+                        .add(endYProperty())
+                        .divide(2)
+                        .subtract(weightField.heightProperty().divide(2))
+        );
         toBack();
     }
 
@@ -30,7 +41,8 @@ public class GraphicEdge extends Line {
         weightField.setFocusTraversable(false);
 
         weightField.setStyle("""
-                    -fx-background-color: transparent;
+                    -fx-background-color: white;
+                    -fx-background-radius: 5px 10px 5px 10px;
                     -fx-border-color: transparent;
                     -fx-font-size: 15px;
                     -fx-text-fill: #006400;

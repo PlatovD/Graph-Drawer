@@ -15,6 +15,7 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         Controller controller = fxmlLoader.getController();
+        Model.setController(controller);
         stage.setScene(scene);
         stage.show();
     }

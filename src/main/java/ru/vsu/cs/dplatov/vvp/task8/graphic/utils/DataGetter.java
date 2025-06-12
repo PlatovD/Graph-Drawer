@@ -13,6 +13,7 @@ public class DataGetter {
 
     public static WGraph<String, Integer> getDataFromStringNotationArea(TextArea textArea) {
         String s = textArea.getText();
+        s = s.replace("\n", "");
 
         WGraph<String, Integer> graph = new DefaultGraph<>();
         String[] edges = s.split(";");

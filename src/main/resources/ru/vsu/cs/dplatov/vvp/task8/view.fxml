@@ -51,11 +51,11 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="601.0" prefWidth="195.0">
                                   <children>
                               <Button fx:id="drawFromNotationButton" layoutX="20.0" layoutY="673.0" mnemonicParsing="false" onAction="#drawFromNotationHandler" prefHeight="27.0" prefWidth="154.0" text="Перерисовать" />
-                              <Label layoutX="67.0" layoutY="185.0" text="First node" />
-                              <TextField fx:id="toConnect1" layoutX="19.0" layoutY="203.0" />
+                              <Label layoutX="67.0" layoutY="187.0" text="First node" />
+                              <TextField fx:id="toConnect1" layoutX="19.0" layoutY="205.0" />
                               <Label layoutX="60.0" layoutY="243.0" text="Second node" />
                               <TextField fx:id="toConnect2" layoutX="19.0" layoutY="261.0" />
-                              <Button fx:id="connectBtn" layoutX="39.0" layoutY="306.0" mnemonicParsing="false" onAction="#connectNodes" style="-fx-background-color: fff;" text="Соединить узлы" />
+                              <Button fx:id="connectBtn" layoutX="42.0" layoutY="357.0" mnemonicParsing="false" onAction="#connectNodes" style="-fx-background-color: fff;" text="Соединить узлы" />
                                       <Rectangle fx:id="exampleNode" arcHeight="1.0" arcWidth="1.0" fill="#f8f8f8" height="86.0" layoutX="56.0" layoutY="36.0" onMouseClicked="#handleChoose" stroke="BLACK" strokeType="INSIDE" width="86.0" />
                                       <Label layoutX="83.0" layoutY="70.0" text="Node" />
                               <Label layoutX="38.0" layoutY="5.0" text="Создание узлов">
@@ -70,6 +70,8 @@
                                  </font>
                               </Label>
                               <Line endX="71.5" layoutX="98.0" layoutY="174.0" startX="-62.0" />
+                              <TextField fx:id="weightField" layoutX="19.0" layoutY="312.0" />
+                              <Label layoutX="75.0" layoutY="294.0" text="Weight" />
                                   </children>
                               </AnchorPane>
                           </content>
