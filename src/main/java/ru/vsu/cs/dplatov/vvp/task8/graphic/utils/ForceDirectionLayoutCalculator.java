@@ -3,7 +3,7 @@ package ru.vsu.cs.dplatov.vvp.task8.graphic.utils;
 import javafx.geometry.Point2D;
 import ru.vsu.cs.dplatov.vvp.task8.Model;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
-import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +51,7 @@ public class ForceDirectionLayoutCalculator {
 
                 for (GraphicNode u : model.getNodes()) {
                     u.setPosition(u.getPosition().add(dispersion.get(u).normalize().multiply(Math.min(t, u.getPosition().magnitude()))));
-                    u.setPosition(new Point2D(Math.min(W - 80, Math.max(0, u.getPosition().getX())), Math.min(L - 80, Math.max(0, u.getPosition().getY()))));
+                    u.setPosition(new Point2D(Math.min(W + 10, Math.max(0, u.getPosition().getX())), Math.min(L + 10, Math.max(0, u.getPosition().getY()))));
                 }
                 t = t * (1.0 - coolingRate);
             }

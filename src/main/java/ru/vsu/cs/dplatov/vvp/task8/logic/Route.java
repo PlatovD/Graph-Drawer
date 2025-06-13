@@ -1,17 +1,15 @@
 package ru.vsu.cs.dplatov.vvp.task8.logic;
 
-public class Route {
-    String startStation;
-    String endStation;
-    int vehicleNum;
-    int timeStart;
-    int timeStop;
+import java.util.List;
 
-    public Route(String startStation, String endStation, int vehicleNum, int timeStart, int timeStop) {
-        this.startStation = startStation;
-        this.endStation = endStation;
-        this.vehicleNum = vehicleNum;
-        this.timeStart = timeStart;
-        this.timeStop = timeStop;
+public class Route {
+    private final List<String> stations;
+
+    public Route(List<String> route) {
+        stations = route;
+    }
+
+    public List<String> getStations() {
+        return stations;
     }
 }

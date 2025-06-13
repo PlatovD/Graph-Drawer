@@ -10,17 +10,20 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#removeNode" prefHeight="800.0" prefWidth="984.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.vsu.cs.dplatov.vvp.task8.Controller">
     <children>
-      <SplitPane dividerPositions="0.28971486761710796" prefHeight="747.0" prefWidth="984.0">
+      <SplitPane dividerPositions="0.1990835030549898" prefHeight="747.0" prefWidth="984.0">
          <items>
-              <TabPane fx:id="leftMenuPane" prefHeight="750.0" prefWidth="623.0" style="-fx-background-color: #D3D3D3;" tabClosingPolicy="UNAVAILABLE">
+              <TabPane fx:id="leftMenuPane" prefHeight="745.0" prefWidth="193.0" style="-fx-background-color: #D3D3D3;" tabClosingPolicy="UNAVAILABLE">
                   <tabs>
                       <Tab text="Matrix">
                           <content>
@@ -79,7 +82,7 @@
                       </Tab>
                   <Tab text="Task">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="714.0" prefWidth="611.0">
                            <children>
                               <Label layoutX="29.0" layoutY="14.0" text="Пункт отравления">
                                  <font>
@@ -91,21 +94,65 @@
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <ChoiceBox layoutX="22.0" layoutY="35.0" prefHeight="9.0" prefWidth="150.0" />
-                              <ChoiceBox layoutX="21.0" layoutY="101.0" prefWidth="150.0" />
-                              <Label layoutX="17.0" layoutY="274.0" text="Самый короткий путь">
+                              <ChoiceBox fx:id="fromStation" layoutX="22.0" layoutY="35.0" prefHeight="9.0" prefWidth="150.0" />
+                              <ChoiceBox fx:id="toStation" layoutX="21.0" layoutY="101.0" prefWidth="150.0" />
+                              <Label layoutX="17.0" layoutY="224.0" text="Самый короткий путь">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <Label layoutX="17.0" layoutY="500.0" text="Самый дешевый путь">
+                              <Label layoutX="17.0" layoutY="450.0" text="Самый дешевый путь">
                                  <font>
                                     <Font size="15.0" />
                                  </font>
                               </Label>
-                              <TextArea layoutX="19.0" layoutY="295.0" prefHeight="173.0" prefWidth="157.0" />
-                              <TextArea layoutX="19.0" layoutY="522.0" prefHeight="173.0" prefWidth="157.0" />
-                              <Label layoutX="8.0" layoutY="157.0" text="Дополнительные переметры &gt;&gt;" />
+                              <TextArea layoutX="19.0" layoutY="245.0" prefHeight="173.0" prefWidth="157.0" />
+                              <TextArea layoutX="19.0" layoutY="472.0" prefHeight="173.0" prefWidth="157.0" />
+                              <TextField fx:id="timeDeparture" layoutX="17.0" layoutY="166.0" />
+                              <Label layoutX="44.0" layoutY="145.0" text="Время выезда">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="247.0" layoutY="16.0" text="Маршруты">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="21.0" fitWidth="15.0" layoutX="345.0" layoutY="20.0" onMouseClicked="#addRoute" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@add.png" />
+                                 </image>
+                              </ImageView>
+                              <VBox fx:id="routesBox" layoutX="247.0" layoutY="45.0" prefHeight="289.0" prefWidth="265.0" style="-fx-border-color: #000;" />
+                              <ImageView fitHeight="21.0" fitWidth="15.0" layoutX="375.0" layoutY="20.0" onMouseClicked="#deleteRoute" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@minus.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="247.0" layoutY="356.0" text="Транспорт">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <ImageView fitHeight="21.0" fitWidth="15.0" layoutX="345.0" layoutY="360.0" onMouseClicked="#addVehicle" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@add.png" />
+                                 </image>
+                              </ImageView>
+                              <VBox fx:id="vehicleBox" layoutX="247.0" layoutY="400.0" prefHeight="289.0" prefWidth="460.0" style="-fx-border-color: #000;" />
+                              <ImageView fitHeight="21.0" fitWidth="15.0" layoutX="375.0" layoutY="360.0" onMouseClicked="#deleteVehicle" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@minus.png" />
+                                 </image>
+                              </ImageView>
+                              <Label layoutX="424.0" layoutY="19.0" text="node-node-..." />
+                              <Label layoutX="267.0" layoutY="381.0" text="№ ТС" />
+                              <Label layoutX="425.0" layoutY="381.0" text="Время выезда" />
+                              <Label layoutX="545.0" layoutY="381.0" text="Скорость" />
+                              <Label layoutX="329.0" layoutY="381.0" text="№ Маршрут" />
+                              <Label layoutX="625.0" layoutY="381.0" text="Цена за км" />
+                              <Button layoutX="36.0" layoutY="662.0" mnemonicParsing="false" onAction="#calcActions" text="Вычислить пути" />
                            </children>
                         </AnchorPane>
                     </content>

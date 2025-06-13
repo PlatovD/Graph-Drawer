@@ -1,4 +1,4 @@
-package ru.vsu.cs.dplatov.vvp.task8.logic;
+package ru.vsu.cs.dplatov.vvp.task8.logic.utils;
 
 public interface WGraph<T, N extends Number> {
 

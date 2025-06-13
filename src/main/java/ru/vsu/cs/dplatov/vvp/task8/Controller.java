@@ -9,17 +9,24 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicEdge;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.SimpleElementsCreater;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.utils.ForceDirectionLayoutCalculator;
-import ru.vsu.cs.dplatov.vvp.task8.logic.DefaultGraph;
-import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.BusRide;
+import ru.vsu.cs.dplatov.vvp.task8.logic.LogicModel;
+import ru.vsu.cs.dplatov.vvp.task8.logic.Route;
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.DefaultGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.utils.DataGetter;
 
 import java.net.URL;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -32,6 +39,7 @@ public class Controller implements Initializable {
     private TabPane leftMenuPane;
 
     private final Model storage = Model.getInstance();
+    private final LogicModel logicStorage = LogicModel.getInstance();
 
     //List
     @FXML
@@ -55,6 +63,21 @@ public class Controller implements Initializable {
 
     @FXML
     private TextField weightField;
+
+    @FXML
+    private ChoiceBox<String> fromStation;
+
+    @FXML
+    private ChoiceBox<String> toStation;
+
+    @FXML
+    private TextField timeDeparture;
+
+    @FXML
+    private VBox routesBox;
+
+    @FXML
+    private VBox vehicleBox;
 
     @FXML
     private void handleChoose(MouseEvent e) {
@@ -126,7 +149,7 @@ public class Controller implements Initializable {
     }
 
     private void onChangeTab(ObservableValue<? extends Tab> obs, Tab lastTab, Tab newTab) {
-        if (leftMenuPane.getSelectionModel().isSelected(1)) return;
+        updateTask();
         WGraph<String, Integer> graph = new DefaultGraph<>();
         storage.parseToBack(graph);
 
@@ -154,7 +177,8 @@ public class Controller implements Initializable {
 
     @FXML
     private void drawFromNotationHandler() {
-        onChangeTab(null, null, null);
+        if (!leftMenuPane.getSelectionModel().isSelected(1))
+            onChangeTab(null, null, null);
         WGraph<String, Integer> graph = DataGetter.getDataFromStringNotationArea(stringNotationArea);
         drawingPane.getChildren().clear();
         storage.clear();
@@ -171,5 +195,71 @@ public class Controller implements Initializable {
 
     public Pane getDrawingPane() {
         return drawingPane;
+    }
+
+    private void updateTask() {
+        fromStation.getItems().clear();
+        toStation.getItems().clear();
+        for (GraphicNode node : storage.getNodes()) {
+            fromStation.getItems().add(node.getText());
+            toStation.getItems().add(node.getText());
+        }
+    }
+
+    @FXML
+    private void addRoute() {
+        if (routesBox.getChildren().size() == 10) return;
+        routesBox.getChildren().add(SimpleElementsCreater.createRouteBox(routesBox.getChildren().size() + 1));
+    }
+
+    @FXML
+    private void deleteRoute() {
+        if (routesBox.getChildren().isEmpty()) return;
+        routesBox.getChildren().remove(routesBox.getChildren().size() - 1);
+    }
+
+    @FXML
+    private void addVehicle() {
+        if (vehicleBox.getChildren().size() == 8) return;
+        vehicleBox.getChildren().add(SimpleElementsCreater.createVehicleBox());
+    }
+
+    @FXML
+    private void deleteVehicle() {
+        if (vehicleBox.getChildren().isEmpty()) return;
+        vehicleBox.getChildren().remove(vehicleBox.getChildren().size() - 1);
+    }
+
+    @FXML
+    private void calcActions() {
+        logicStorage.clear();
+        WGraph<String, Integer> graph = DataGetter.getDataFromStringNotationArea(stringNotationArea);
+        for (Node node : routesBox.getChildren()) {
+            if (node instanceof HBox route && route.getChildren().get(0) instanceof Label num && route.getChildren().get(1) instanceof TextField path) {
+                try {
+                    logicStorage.addRoute(Integer.parseInt(num.getText().strip()), DataGetter.parsePathFromStringNotation(path.getText()));
+                } catch (NumberFormatException e) {
+                    System.err.println("Wrong route format");
+                }
+            }
+        }
+
+        for (Node node : vehicleBox.getChildren()) {
+            if (node instanceof HBox vehicle) {
+                List<String> fields = vehicle.getChildren().stream().map(child -> (TextField) child).map(TextInputControl::getText).toList();
+                try {
+                    Route route = logicStorage.getRoute(Integer.parseInt(fields.get(0).strip()));
+                    String vehicleNum = fields.get(1).strip();
+                    int timeStart = Integer.parseInt(fields.get(2).strip());
+                    int speed = Integer.parseInt(fields.get(3).strip());
+                    int price = Integer.parseInt(fields.get(4).strip());
+                    System.out.println(vehicleNum + " " + timeStart + " " + speed + " " + price);
+                    if (speed < 0 || route == null) continue;
+                    logicStorage.addRide(new BusRide(graph, route, vehicleNum, timeStart, speed, price));
+                } catch (NumberFormatException e) {
+                    System.err.println("Wrong vehicle format" + e.getMessage());
+                }
+            }
+        }
     }
 }

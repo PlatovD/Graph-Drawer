@@ -14,10 +14,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Popup;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicEdge;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
-import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Model {
@@ -223,7 +222,7 @@ public class Model {
         Button button = new Button("Построить ребро");
         button.setStyle("""
                     -fx-font-size: 14px;
-                    -fx-background-color: #4a7bec;
+                    -fx-background-color: #006400;
                     -fx-text-fill: white;
                     -fx-padding: 5px 15px;
                     -fx-background-radius: 3px;

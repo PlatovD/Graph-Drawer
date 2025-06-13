@@ -1,5 +1,7 @@
 package ru.vsu.cs.dplatov.vvp.task8.logic;
 
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
+
 import java.util.*;
 
 public class Algorithms {

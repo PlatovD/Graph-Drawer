@@ -2,10 +2,15 @@ package ru.vsu.cs.dplatov.vvp.task8.graphic.utils;
 
 import javafx.scene.control.TextArea;
 import ru.vsu.cs.dplatov.vvp.task8.Model;
-import ru.vsu.cs.dplatov.vvp.task8.logic.DefaultGraph;
-import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.Route;
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.DefaultGraph;
+import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -62,5 +67,13 @@ public class DataGetter {
                 model.createEdge(edge.from(), edge.to(), edge.weight());
             }
         }
+    }
+
+    public static Route parsePathFromStringNotation(String s) {
+        List<String> path = new ArrayList<>();
+        for (String node : s.split("-")) {
+            path.add(node.strip());
+        }
+        return new Route(path);
     }
 }
