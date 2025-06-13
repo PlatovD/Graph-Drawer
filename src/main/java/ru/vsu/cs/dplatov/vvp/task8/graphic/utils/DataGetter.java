@@ -78,30 +78,50 @@ public class DataGetter {
     }
 
     public static String writePathActions(Map<String, BusRide> path) {
+        if (path == null || path.isEmpty()) {
+            return "Маршрут пуст";
+        }
+
         StringBuilder story = new StringBuilder();
         BusRide lastRide = null;
-        int iteration = 0;
+        int currentStop = 0;
+        int totalStops = path.size();
+
         for (Map.Entry<String, BusRide> entry : path.entrySet()) {
+            currentStop++;
             String station = entry.getKey();
             BusRide ride = entry.getValue();
 
-            if (iteration == path.size() - 1) {
-                story.append("Приехал на желаемую остановку").append("\n");
+            // Проверка последней остановки
+            if (currentStop == totalStops) {
+                story.append("Прибытие на конечную остановку: ").append(station);
                 break;
             }
 
-            if (lastRide != entry.getValue()) {
-                if (lastRide == null)
-                    story.append("На остановке ").append(station).append(" садится на ").append(ride.getVehicleNum()).append(" следующий по маршруту ").append(ride.getRoute().getStations().get(0)).append(" ").append(ride.getRoute().getStations().get(ride.getRoute().getStations().size() - 1)).append("\n");
-                else {
-                    story.append("На остановке").append(station).append("Пересаживается на ").append(ride.getVehicleNum()).append(" следующий по маршруту ").append(ride.getRoute().getStations().get(0)).append(" ").append(ride.getRoute().getStations().get(ride.getRoute().getStations().size() - 1)).append("\n");
+            if (!ride.equals(lastRide)) {
+                if (lastRide == null) {
+                    story.append(String.format(
+                            "На остановке %s садимся на транспорт №%s, маршрут: %s → %s%n",
+                            station,
+                            ride.getVehicleNum(),
+                            ride.getRoute().getStations().get(0),
+                            ride.getRoute().getStations().get(ride.getRoute().getStations().size() - 1)
+                    ));
+                } else {
+                    story.append(String.format(
+                            "На остановке %s пересаживаемся на транспорт №%s, маршрут: %s → %s%n",
+                            station,
+                            ride.getVehicleNum(),
+                            ride.getRoute().getStations().get(0),
+                            ride.getRoute().getStations().get(ride.getRoute().getStations().size() - 1)
+                    ));
                 }
-                lastRide = entry.getValue();
+                lastRide = ride;
             } else {
-                story.append("Проезжает отсановку ").append(station).append("\n");
+                story.append(String.format("Проезжаем остановку %s%n", station));
             }
-            iteration++;
         }
+
         return story.toString();
     }
 }

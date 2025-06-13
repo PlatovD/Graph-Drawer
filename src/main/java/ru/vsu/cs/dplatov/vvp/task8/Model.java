@@ -260,7 +260,7 @@ public class Model {
         return popup;
     }
 
-    public void lightPath(Set<String> values) {
+    public void lightPath(List<String> values) {
         for (GraphicNode node : nodes) {
             if (values.contains(node.getText())) {
                 node.light();

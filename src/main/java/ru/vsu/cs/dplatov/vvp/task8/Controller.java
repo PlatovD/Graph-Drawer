@@ -16,6 +16,7 @@ import javafx.scene.shape.Rectangle;
 
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicEdge;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.RouteDialog;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.SimpleElementsCreater;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.utils.ForceDirectionLayoutCalculator;
 import ru.vsu.cs.dplatov.vvp.task8.logic.BusRide;
@@ -82,8 +83,6 @@ public class Controller implements Initializable {
     @FXML
     private TextArea shortestPathActionsArea;
 
-    @FXML
-    private TextArea cheapestPathActionsArea;
 
     @FXML
     private void handleChoose(MouseEvent e) {
@@ -238,7 +237,28 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    private void calcActions() {
+    private void calcActionsMinPath() {
+        if (!updateTaskStorage()) return;
+        LogicModel.TripInfo paths = logicStorage.calcShortestPath(fromStation.getValue().strip(), toStation.getValue().strip(), Integer.parseInt(timeDeparture.getText().strip()));
+        if (paths == null) shortestPathActionsArea.setText("Добраться на транспорте не выйдет");
+        else {
+            storage.lightPath(paths.stations());
+            RouteDialog.showRoute(paths);
+        }
+    }
+
+    @FXML
+    private void calcActionsMinPrice() {
+        if (!updateTaskStorage()) return;
+        LogicModel.TripInfo paths = logicStorage.calcCheapestPath(fromStation.getValue().strip(), toStation.getValue().strip(), Integer.parseInt(timeDeparture.getText().strip()));
+        if (paths == null) shortestPathActionsArea.setText("Добраться на транспорте не выйдет");
+        else {
+            storage.lightPath(paths.stations());
+            RouteDialog.showRoute(paths);
+        }
+    }
+
+    private boolean updateTaskStorage() {
         storage.offLightPath();
         logicStorage.clear();
         WGraph<String, Integer> graph = DataGetter.getDataFromStringNotationArea(stringNotationArea);
@@ -248,6 +268,7 @@ public class Controller implements Initializable {
                     logicStorage.addRoute(Integer.parseInt(num.getText().strip()), DataGetter.parsePathFromStringNotation(path.getText()));
                 } catch (NumberFormatException e) {
                     System.err.println("Wrong route format");
+                    return false;
                 }
             }
         }
@@ -265,14 +286,10 @@ public class Controller implements Initializable {
                     logicStorage.addRide(new BusRide(graph, route, vehicleNum, timeStart, speed, price));
                 } catch (NumberFormatException e) {
                     System.err.println("Wrong vehicle format" + e.getMessage());
+                    return false;
                 }
             }
         }
-        Map<String, BusRide> paths = logicStorage.calcShortestPath(fromStation.getValue().strip(), toStation.getValue().strip(), Integer.parseInt(timeDeparture.getText().strip()));
-        if (paths == null) shortestPathActionsArea.setText("Добраться на транспорте не выйдет");
-        else {
-            storage.lightPath(paths.keySet());
-            shortestPathActionsArea.setText(DataGetter.writePathActions(paths));
-        }
+        return true;
     }
 }

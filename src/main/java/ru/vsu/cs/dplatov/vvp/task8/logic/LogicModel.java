@@ -8,6 +8,9 @@ public class LogicModel {
     private final Map<Integer, Route> routes = new HashMap<>();
     private final List<BusRide> rides = new ArrayList<>();
 
+    public record TripInfo(List<String> stations, List<BusRide> rides) {
+    }
+
     public static LogicModel getInstance() {
         if (instance == null) {
             instance = new LogicModel();
@@ -32,10 +35,11 @@ public class LogicModel {
         rides.clear();
     }
 
-    public Map<String, BusRide> calcShortestPath(String start, String stop, int currentTime) {
+    public TripInfo calcShortestPath(String start, String stop, int currentTime) {
         String currentStation = start;
         BusRide currentRide = null;
-        Map<String, BusRide> path = new HashMap<>();
+        List<String> stations = new ArrayList<>();
+        List<BusRide> ridesN = new ArrayList<>();
 
         while (!Objects.equals(currentStation, stop)) {
             for (BusRide busRide : rides) {
@@ -45,13 +49,41 @@ public class LogicModel {
             }
             if (currentRide == null || currentRide.stationPathLength.getOrDefault(currentStation, Integer.MAX_VALUE).equals(Integer.MAX_VALUE))
                 return null;
-            path.put(currentStation, currentRide);
+            stations.add(currentStation);
+            ridesN.add(currentRide);
             currentStation = currentRide.getNextStation(currentStation);
             currentTime = currentRide.stationTimings.get(currentStation);
         }
 
-        path.put(currentStation, currentRide);
+        stations.add(currentStation);
+        ridesN.add(currentRide);
 
-        return path;
+        return new TripInfo(stations, ridesN);
+    }
+
+    public TripInfo calcCheapestPath(String start, String stop, int currentTime) {
+        String currentStation = start;
+        BusRide currentRide = null;
+        List<String> stations = new ArrayList<>();
+        List<BusRide> ridesN = new ArrayList<>();
+
+        while (!Objects.equals(currentStation, stop)) {
+            for (BusRide busRide : rides) {
+                if ((currentRide == null && busRide.containsStation(currentStation) && busRide.containsStation(stop)) || (busRide.containsStation(currentStation) && busRide.containsStation(stop) && currentRide != null) && (busRide.stationPrices.get(stop) < currentRide.stationPrices.get(stop) && currentTime <= busRide.stationTimings.getOrDefault(currentStation, -1))) {
+                    currentRide = busRide;
+                }
+            }
+            if (currentRide == null || currentRide.stationPrices.getOrDefault(currentStation, Integer.MAX_VALUE).equals(Integer.MAX_VALUE))
+                return null;
+            stations.add(currentStation);
+            ridesN.add(currentRide);
+            currentStation = currentRide.getNextStation(currentStation);
+            currentTime = currentRide.stationPrices.get(currentStation);
+        }
+
+        stations.add(currentStation);
+        ridesN.add(currentRide);
+
+        return new TripInfo(stations, ridesN);
     }
 }
