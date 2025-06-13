@@ -32,7 +32,26 @@ public class LogicModel {
         rides.clear();
     }
 
-    public String calcShortestPath() {
-        return "";
+    public Map<String, BusRide> calcShortestPath(String start, String stop, int currentTime) {
+        String currentStation = start;
+        BusRide currentRide = null;
+        Map<String, BusRide> path = new HashMap<>();
+
+        while (!Objects.equals(currentStation, stop)) {
+            for (BusRide busRide : rides) {
+                if ((currentRide == null && busRide.containsStation(currentStation) && busRide.containsStation(stop)) || (busRide.containsStation(currentStation) && busRide.containsStation(stop) && currentRide != null) && (busRide.stationPathLength.get(stop) < currentRide.stationPathLength.get(stop) && currentTime <= busRide.stationTimings.getOrDefault(currentStation, -1))) {
+                    currentRide = busRide;
+                }
+            }
+            if (currentRide == null || currentRide.stationPathLength.getOrDefault(currentStation, Integer.MAX_VALUE).equals(Integer.MAX_VALUE))
+                return null;
+            path.put(currentStation, currentRide);
+            currentStation = currentRide.getNextStation(currentStation);
+            currentTime = currentRide.stationTimings.get(currentStation);
+        }
+
+        path.put(currentStation, currentRide);
+
+        return path;
     }
 }

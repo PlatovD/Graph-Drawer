@@ -18,6 +18,7 @@ import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Model {
     private Node activeObject;
@@ -257,6 +258,20 @@ public class Model {
         textField.setOnAction(e -> button.fire());
 
         return popup;
+    }
+
+    public void lightPath(Set<String> values) {
+        for (GraphicNode node : nodes) {
+            if (values.contains(node.getText())) {
+                node.light();
+            }
+        }
+    }
+
+    public void offLightPath() {
+        for (GraphicNode node : nodes) {
+            node.offLight();
+        }
     }
 
     public static Controller getController() {

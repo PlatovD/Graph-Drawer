@@ -2,15 +2,15 @@ package ru.vsu.cs.dplatov.vvp.task8.graphic.utils;
 
 import javafx.scene.control.TextArea;
 import ru.vsu.cs.dplatov.vvp.task8.Model;
+import ru.vsu.cs.dplatov.vvp.task8.logic.BusRide;
 import ru.vsu.cs.dplatov.vvp.task8.logic.Route;
 import ru.vsu.cs.dplatov.vvp.task8.logic.utils.DefaultGraph;
 import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,4 +76,33 @@ public class DataGetter {
         }
         return new Route(path);
     }
+
+    public static String writePathActions(Map<String, BusRide> path) {
+        StringBuilder story = new StringBuilder();
+        BusRide lastRide = null;
+        int iteration = 0;
+        for (Map.Entry<String, BusRide> entry : path.entrySet()) {
+            String station = entry.getKey();
+            BusRide ride = entry.getValue();
+
+            if (iteration == path.size() - 1) {
+                story.append("Приехал на желаемую остановку").append("\n");
+                break;
+            }
+
+            if (lastRide != entry.getValue()) {
+                if (lastRide == null)
+                    story.append("На остановке ").append(station).append(" садится на ").append(ride.getVehicleNum()).append(" следующий по маршруту ").append(ride.getRoute().getStations().get(0)).append(" ").append(ride.getRoute().getStations().get(ride.getRoute().getStations().size() - 1)).append("\n");
+                else {
+                    story.append("На остановке").append(station).append("Пересаживается на ").append(ride.getVehicleNum()).append(" следующий по маршруту ").append(ride.getRoute().getStations().get(0)).append(" ").append(ride.getRoute().getStations().get(ride.getRoute().getStations().size() - 1)).append("\n");
+                }
+                lastRide = entry.getValue();
+            } else {
+                story.append("Проезжает отсановку ").append(station).append("\n");
+            }
+            iteration++;
+        }
+        return story.toString();
+    }
 }
+

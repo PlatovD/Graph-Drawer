@@ -26,9 +26,9 @@ import ru.vsu.cs.dplatov.vvp.task8.logic.utils.WGraph;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.utils.DataGetter;
 
 import java.net.URL;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -78,6 +78,12 @@ public class Controller implements Initializable {
 
     @FXML
     private VBox vehicleBox;
+
+    @FXML
+    private TextArea shortestPathActionsArea;
+
+    @FXML
+    private TextArea cheapestPathActionsArea;
 
     @FXML
     private void handleChoose(MouseEvent e) {
@@ -150,6 +156,7 @@ public class Controller implements Initializable {
 
     private void onChangeTab(ObservableValue<? extends Tab> obs, Tab lastTab, Tab newTab) {
         updateTask();
+        storage.offLightPath();
         WGraph<String, Integer> graph = new DefaultGraph<>();
         storage.parseToBack(graph);
 
@@ -232,6 +239,7 @@ public class Controller implements Initializable {
 
     @FXML
     private void calcActions() {
+        storage.offLightPath();
         logicStorage.clear();
         WGraph<String, Integer> graph = DataGetter.getDataFromStringNotationArea(stringNotationArea);
         for (Node node : routesBox.getChildren()) {
@@ -248,18 +256,23 @@ public class Controller implements Initializable {
             if (node instanceof HBox vehicle) {
                 List<String> fields = vehicle.getChildren().stream().map(child -> (TextField) child).map(TextInputControl::getText).toList();
                 try {
-                    Route route = logicStorage.getRoute(Integer.parseInt(fields.get(0).strip()));
-                    String vehicleNum = fields.get(1).strip();
+                    String vehicleNum = fields.get(0).strip();
+                    Route route = logicStorage.getRoute(Integer.parseInt(fields.get(1).strip()));
                     int timeStart = Integer.parseInt(fields.get(2).strip());
                     int speed = Integer.parseInt(fields.get(3).strip());
                     int price = Integer.parseInt(fields.get(4).strip());
-                    System.out.println(vehicleNum + " " + timeStart + " " + speed + " " + price);
                     if (speed < 0 || route == null) continue;
                     logicStorage.addRide(new BusRide(graph, route, vehicleNum, timeStart, speed, price));
                 } catch (NumberFormatException e) {
                     System.err.println("Wrong vehicle format" + e.getMessage());
                 }
             }
+        }
+        Map<String, BusRide> paths = logicStorage.calcShortestPath(fromStation.getValue().strip(), toStation.getValue().strip(), Integer.parseInt(timeDeparture.getText().strip()));
+        if (paths == null) shortestPathActionsArea.setText("Добраться на транспорте не выйдет");
+        else {
+            storage.lightPath(paths.keySet());
+            shortestPathActionsArea.setText(DataGetter.writePathActions(paths));
         }
     }
 }
