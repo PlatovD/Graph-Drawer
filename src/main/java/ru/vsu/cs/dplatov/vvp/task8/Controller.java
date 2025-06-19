@@ -128,7 +128,7 @@ public class Controller implements Initializable {
     }
 
     private void onChangeTab(ObservableValue<? extends Tab> obs, Tab lastTab, Tab newTab) {
-        if (leftMenuPane.getSelectionModel().isSelected(1)) return;
+        storage.offLightPath();
         WGraph<String, Integer> graph = new DefaultGraph<>();
         storage.parseToBack(graph);
 
@@ -156,7 +156,8 @@ public class Controller implements Initializable {
 
     @FXML
     private void drawFromNotationHandler() {
-        onChangeTab(null, null, null);
+        if (!leftMenuPane.getSelectionModel().isSelected(0))
+            onChangeTab(null, null, null);
         WGraph<String, Integer> graph = DataGetter.getDataFromStringNotationArea(stringNotationArea);
         drawingPane.getChildren().clear();
         storage.clear();
