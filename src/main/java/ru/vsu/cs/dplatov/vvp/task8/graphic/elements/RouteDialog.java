@@ -42,13 +42,13 @@ public class RouteDialog {
                 }
 
                 sb.append(String.format("   Маршрут: %s → %s\n\n", currentRide.getRoute().getStations().get(0), currentRide.getRoute().getStations().get(currentRide.getRoute().getStations().size() - 1)));
-            }
-            else {
+            } else {
                 sb.append(String.format("⏩ %d. Проезжаем %s\n\n", i + 1, station));
             }
 
             lastRide = currentRide;
         }
+
 
         return sb.toString();
     }
