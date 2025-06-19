@@ -17,7 +17,6 @@ import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
 import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Model {
@@ -258,6 +257,20 @@ public class Model {
         textField.setOnAction(e -> button.fire());
 
         return popup;
+    }
+
+    public void lightPath(List<String> values) {
+        for (GraphicNode node : nodes) {
+            if (values.contains(node.getText())) {
+                node.light();
+            }
+        }
+    }
+
+    public void offLightPath() {
+        for (GraphicNode node : nodes) {
+            node.offLight();
+        }
     }
 
     public static Controller getController() {

@@ -22,6 +22,7 @@ import ru.vsu.cs.dplatov.vvp.task8.graphic.utils.DataGetter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -97,6 +98,7 @@ public class Controller implements Initializable {
     }
 
     public void connectNodesFromMouseMenu(String firstNode, String secondNode, String weight) {
+        if (Objects.equals(firstNode, secondNode)) return;
         toConnect1.setText(firstNode);
         toConnect2.setText(secondNode);
         weightField.setText(weight);

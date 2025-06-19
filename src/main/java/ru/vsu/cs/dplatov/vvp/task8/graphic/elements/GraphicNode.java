@@ -62,6 +62,18 @@ public class GraphicNode extends HBox {
         }
     }
 
+    public void light() {
+        setStyle("-fx-background-color: #f8f8f8; " +
+                "-fx-border-color: red; " +
+                "-fx-border-width: 1;");
+    }
+
+    public void offLight() {
+        setStyle("-fx-background-color: #f8f8f8; " +
+                "-fx-border-color: black; " +
+                "-fx-border-width: 1;");
+    }
+
     public double getCenterX() {
         return getLayoutX() + getPrefWidth() / 2;
     }
