@@ -1,6 +1,6 @@
 package ru.vsu.cs.dplatov.vvp.task8.logic;
 
-public interface WGraph<T, N extends Number> {
+public interface WGraph<T, N> {
 
     /**
      * Количество вершин в графе
@@ -73,7 +73,7 @@ public interface WGraph<T, N extends Number> {
      * @param <T> Тип значений узлов, которые связывает ребро
      * @param <N> Тип значения веса ребра
      */
-    interface Edge<T, N extends Number> {
+    interface Edge<T, N> {
         T from();
 
         T to();

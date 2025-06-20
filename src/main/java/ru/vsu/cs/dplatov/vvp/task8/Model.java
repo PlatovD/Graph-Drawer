@@ -1,19 +1,15 @@
 package ru.vsu.cs.dplatov.vvp.task8;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Popup;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicEdge;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.PopupConnector;
+import ru.vsu.cs.dplatov.vvp.task8.logic.TripleValue;
 import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
 
 import java.util.ArrayList;
@@ -73,7 +69,7 @@ public class Model {
         node.setOnMouseReleased(this::dragStopHandler);
     }
 
-    public GraphicEdge createEdge(String from, String to, int weight) {
+    public GraphicEdge createEdge(String from, String to, int dist, int time, int price) {
         GraphicNode first = findNode(from);
         GraphicNode second = findNode(to);
         if (first == null || second == null) return null;
@@ -90,7 +86,9 @@ public class Model {
         edge.setStartY(first.getCenterY());
         edge.setEndX(second.getCenterX());
         edge.setEndY(second.getCenterY());
-        edge.getWeightField().setText(String.valueOf(weight));
+        edge.getDistField().setText(String.valueOf(dist));
+        edge.getTimeField().setText(String.valueOf(time));
+        edge.getPriceField().setText(String.valueOf(price));
         return edge;
     }
 
@@ -109,18 +107,12 @@ public class Model {
     }
 
     public void setActiveObject(Node activeObject) {
+        Color accentColor = Color.web("#5C6BC0");
         if (activeObject instanceof Rectangle rect) {
-            rect.setStroke(Color.GREEN);
+            rect.setStroke(accentColor);
             rect.setStrokeWidth(2);
         } else if (activeObject instanceof GraphicNode node) {
-            BorderStroke borderStroke = new BorderStroke(
-                    Color.GREEN,
-                    BorderStrokeStyle.SOLID,
-                    new CornerRadii(0),
-                    new BorderWidths(2)
-            );
-
-            node.setBorder(new Border(borderStroke));
+            node.setActive();
         }
         this.activeObject = activeObject;
     }
@@ -153,7 +145,21 @@ public class Model {
     private void dragStopHandler(MouseEvent event) {
         if (event.isShiftDown()) {
             if (activeObject != null && activeObject instanceof GraphicNode node1 && !event.getSource().equals(node1) && event.getSource() instanceof GraphicNode node2) {
-                Popup popup = createPopupConnector(node1, node2);
+                PopupConnector popup = new PopupConnector(node1, node2);
+                popup.getButton().setOnAction(e -> {
+                    if (!popup.getDistanceField().getText().isEmpty() &&
+                            !popup.getTimeField().getText().isEmpty() &&
+                            !popup.getPriceField().getText().isEmpty()) {
+
+                        String params = String.join(";",
+                                popup.getDistanceField().getText(),
+                                popup.getTimeField().getText(),
+                                popup.getPriceField().getText());
+
+                        controller.connectNodesFromMouseMenu(node1.getText(), node2.getText(), params);
+                    }
+                    popup.hide();
+                });
                 popup.show(controller.getDrawingPane(), controller.getDrawingPane().getWidth() / 2 - popup.getWidth() / 2, controller.getDrawingPane().getWidth() / 2 - popup.getHeight() / 2);
             }
         }
@@ -180,13 +186,13 @@ public class Model {
         activeObject = null;
     }
 
-    public void parseToBack(WGraph<String, Integer> graphToFill) {
+    public void parseToBack(WGraph<String, TripleValue<Integer>> graphToFill) {
         graphToFill.clear();
         for (GraphicNode node : nodes) {
             graphToFill.addNode(node.getText());
         }
         for (GraphicEdge edge : edges) {
-            graphToFill.addEdge(edge.getFrom().getText(), edge.getTo().getText(), edge.getWeight());
+            graphToFill.addEdge(edge.getFrom().getText(), edge.getTo().getText(), new TripleValue<>(edge.getDist(), edge.getTime(), edge.getPrice()));
         }
     }
 
@@ -201,63 +207,6 @@ public class Model {
         Model.controller = controller;
     }
 
-    private static Popup createPopupConnector(GraphicNode node1, GraphicNode node2) {
-        Popup popup = new Popup();
-        popup.setAutoHide(true);
-
-        Label label = new Label("Введите вес ребра:");
-        label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 0 0 5 0;");
-
-        TextField textField = new TextField();
-        textField.setPromptText("Введите число");
-        textField.setStyle("""
-                    -fx-font-size: 14px;
-                    -fx-padding: 5px;
-                    -fx-background-radius: 3px;
-                    -fx-border-radius: 3px;
-                    -fx-border-color: #ccc;
-                    -fx-border-width: 1px;
-                """);
-
-        Button button = new Button("Построить ребро");
-        button.setStyle("""
-                    -fx-font-size: 14px;
-                    -fx-background-color: #4a7bec;
-                    -fx-text-fill: white;
-                    -fx-padding: 5px 15px;
-                    -fx-background-radius: 3px;
-                    -fx-cursor: hand;
-                """);
-        button.setOnMouseEntered(e -> button.setStyle(button.getStyle() + "-fx-background-color: #3a6bdc;"));
-        button.setOnMouseExited(e -> button.setStyle(button.getStyle() + "-fx-background-color: #4a7bec;"));
-
-        VBox vBox = new VBox(10, label, textField, button);
-        vBox.setStyle("""
-                    -fx-background-color: white;
-                    -fx-padding: 15px;
-                    -fx-border-color: #ddd;
-                    -fx-border-width: 1px;
-                    -fx-border-radius: 5px;
-                    -fx-background-radius: 5px;
-                    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);
-                """);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setPadding(new Insets(15));
-
-        popup.getContent().add(vBox);
-
-
-        button.setOnAction(e -> {
-            if (!textField.getText().isEmpty()) {
-                controller.connectNodesFromMouseMenu(node1.getText(), node2.getText(), textField.getText());
-            }
-            popup.hide();
-        });
-
-        textField.setOnAction(e -> button.fire());
-
-        return popup;
-    }
 
     public void lightPath(List<String> values) {
         for (GraphicNode node : nodes) {

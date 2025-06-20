@@ -1,0 +1,23 @@
+.tab {
+    -fx-background-color: white;
+    -fx-pref-width: auto;
+}
+
+.tab:selected {
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-effect: null;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-effect: null;
+    -fx-background-color : #6D7BCC;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-text-fill: white;
+}
+
+.tab-header-background {
+    -fx-background-color: white;
+}

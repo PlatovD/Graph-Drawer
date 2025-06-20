@@ -3,13 +3,15 @@ package ru.vsu.cs.dplatov.vvp.task8.graphic.elements;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GraphicNode extends HBox {
+    private final static Color accentColor = Color.web("#5C6BC0");
     private final TextField textField = new TextField("Node");
     private final List<GraphicEdge> connectedEdges = new ArrayList<>();
     private Point2D point2D;
@@ -60,6 +62,16 @@ public class GraphicNode extends HBox {
                 }
             }
         }
+    }
+
+    public void setActive() {
+        BorderStroke borderStroke = new BorderStroke(
+                accentColor,
+                BorderStrokeStyle.SOLID,
+                new CornerRadii(0),
+                new BorderWidths(2)
+        );
+        setBorder(new Border(borderStroke));
     }
 
     public void light() {

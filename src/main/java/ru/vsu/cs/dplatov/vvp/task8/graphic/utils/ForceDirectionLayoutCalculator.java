@@ -3,6 +3,7 @@ package ru.vsu.cs.dplatov.vvp.task8.graphic.utils;
 import javafx.geometry.Point2D;
 import ru.vsu.cs.dplatov.vvp.task8.Model;
 import ru.vsu.cs.dplatov.vvp.task8.graphic.elements.GraphicNode;
+import ru.vsu.cs.dplatov.vvp.task8.logic.TripleValue;
 import ru.vsu.cs.dplatov.vvp.task8.logic.WGraph;
 
 import java.util.HashMap;
@@ -12,7 +13,7 @@ public class ForceDirectionLayoutCalculator {
     private static final int ITERATIONS = 100;
 
 
-    public static void calculateForceDirectedCoordinates(WGraph<String, Integer> graph, Model model) {
+    public static void calculateForceDirectedCoordinates(WGraph<String, TripleValue<Integer>> graph, Model model) {
         DataGetter.fromGraphToModel(graph, model);
         double W = Model.getController().getDrawingPane().getWidth() - 80;
         double L = Model.getController().getDrawingPane().getHeight() - 80;
@@ -51,7 +52,7 @@ public class ForceDirectionLayoutCalculator {
 
                 for (GraphicNode u : model.getNodes()) {
                     u.setPosition(u.getPosition().add(dispersion.get(u).normalize().multiply(Math.min(t, u.getPosition().magnitude()))));
-                    u.setPosition(new Point2D(Math.min(W, Math.max(0, u.getPosition().getX())), Math.min(L, Math.max(0, u.getPosition().getY()))));
+                    u.setPosition(new Point2D(Math.min(W - 30, Math.max(30, u.getPosition().getX())), Math.min(L, Math.max(0, u.getPosition().getY()))));
                 }
                 t = t * (1.0 - coolingRate);
             }

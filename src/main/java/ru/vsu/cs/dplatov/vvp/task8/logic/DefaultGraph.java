@@ -2,7 +2,7 @@ package ru.vsu.cs.dplatov.vvp.task8.logic;
 
 import java.util.*;
 
-public class DefaultGraph<T, N extends Number> implements WGraph<T, N> {
+public class DefaultGraph<T, N> implements WGraph<T, N> {
     class DefaultEdge implements Edge<T, N> {
         private final T from;
         private final T to;
