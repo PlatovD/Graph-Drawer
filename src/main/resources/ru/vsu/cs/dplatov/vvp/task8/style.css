@@ -1,6 +1,26 @@
 .tab {
-    -fx-background-color: white;
-    -fx-pref-width: auto;
+    -fx-background-color: transparent;
+    -fx-text-fill: white !important;
+}
+
+.choice-box {
+    -fx-pref-width: 150px;
+}
+
+.choice-box .context-menu {
+    -fx-pref-width: inherit;
+    -fx-min-width: inherit;
+    -fx-max-width: inherit;
+}
+
+.choice-box .menu-item:hover {
+    -fx-background-color: #8E9DE8;
+    -fx-text-fill: white;
+}
+
+.choice-box .menu-item:focused {
+    -fx-background-color: #8E9DE8;
+    -fx-text-fill: white;
 }
 
 .tab:selected {
@@ -12,12 +32,12 @@
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
     -fx-effect: null;
-    -fx-background-color : #6D7BCC;
+    -fx-background-color : #8E9DE8;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-text-fill: white;
+    -fx-text-fill: white !important;
 }
 
 .tab-header-background {
-    -fx-background-color: white;
+    -fx-background-color: #f4f4f4;
 }
